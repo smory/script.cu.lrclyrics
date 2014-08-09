@@ -62,6 +62,11 @@ def get_artist_from_filename(filename):
             # Artist/Album/Track title.ext
             elif ( __addon__.getSetting( "read_filename_format" ) == "2" ):
                 title = os.path.splitext( basename )[ 0 ].split( " ", 1 )[ 1 ]
+        # Track Artist - title.ext
+        elif ( __addon__.getSetting( "read_filename_format" ) == "3" ):
+            at = basename.split( " ", 1 )[ 1 ].strip()
+            artist = at.split( "-", 1 )[ 0 ].strip()
+            title = os.path.splitext( at.split( "-", 1 )[ 1 ].strip() )[ 0 ]
     except:
         # invalid format selected
         log( "failed to get artist and title from filename" )
