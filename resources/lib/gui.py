@@ -242,7 +242,7 @@ class guiThread(threading.Thread):
         self.mode = kwargs[ "mode" ]
 
     def run(self):
-        ui = GUI( "script-XBMC_Lyrics-main.xml" , __cwd__, "Default", mode=self.mode )
+        ui = GUI( "script-cu-lrclyrics-main.xml" , __cwd__, "Default", mode=self.mode )
         ui.doModal()
         del ui
         WIN.clearProperty('culrc.guirunning')
@@ -319,7 +319,7 @@ class GUI( xbmcgui.WindowXMLDialog ):
     def refresh(self):
         self.lock.acquire()
         try:
-            #May be XBMC is not playing any media file
+            #May be Kodi is not playing any media file
             cur_time = xbmc.Player().getTime()
             nums = self.getControl( 110 ).size()
             pos = self.getControl( 110 ).getSelectedPosition()
