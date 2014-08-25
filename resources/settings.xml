@@ -18,6 +18,7 @@
 		<setting id="lyricsmode" type="bool" label="Lyrics Mode" default="true"/>
 		<setting id="lyricstime" type="bool" label="Lyrics Time" default="true"/>
 		<setting id="darklyrics" type="bool" label="Dark Lyrics" default="true"/>
+		<setting id="hudba.sk" type="bool" label="Hudba.sk" default="true"/>
 	</category>
 	<category label="32151">
 		<setting id="read_filename" type="bool" label="32106" default="false"/>
