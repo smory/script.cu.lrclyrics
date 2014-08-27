@@ -1,15 +1,12 @@
 #-*- coding: UTF-8 -*-
 '''
 Created on 25.8.2014
-
-scraper for http://www.karaoketexty.cz, http://www.karaoketexty.sk, http://www.karaoketexty.net or http://www.karaoketeksty.pl
-The search is not the best when not whole name of artist and song are provided or when diacritics are missing...
 @author: psmorada
 '''
 import urllib2;
 import re;
 
-__title__ = 'karaoketexty'
+__title__ = 'pesnicky.orava.sk'
 __priority__ = '290'
 __lrc__ = False
 
@@ -46,26 +43,30 @@ class LyricsFetcher:
         
         # Search performed in 2 steps for performance reasons
         songPartMatch =  re.search("<dl class=\"search-results\">(.*?)</dl>", searchResponse, re.DOTALL | re.MULTILINE | re.UNICODE);
-        print(songPartMatch.group(1));
+        #print(songPartMatch.group(1));
         
         if not songPartMatch:
             return None;                
 
-        searchResult = re.findall("<a href=\"(.*?)\".*?>\s*(.*?)\s*</.*?(?!Scorch).*?</dd>", songPartMatch.group(1), re.MULTILINE | re.DOTALL);
+        searchResult = re.finditer("<a href=\"(.*?)\".*?>\s*(.*?)\s*</.*?</dd>", songPartMatch.group(1), re.MULTILINE | re.DOTALL);
         
-        if len(searchResult) == 0:
-            print("None");
-            return None;
+#         if len(searchResult) == 0:
+#             print("None");
+#             return None;
         
         links = [];
         
-                
+        #print("*******************")        
         i = 0;
         for result in searchResult:
+            print(result.group(0));
+            if(result.group(0).find("Scorch") > -1):
+                continue;
+            
             a = [];
-            a.append(result[1]); # name from the server
+            a.append(result.group(2)); # name from the server
             #print(result[1]);
-            a.append(self.base_url + result[0]);  # url with lyrics
+            a.append(self.base_url + result.group(1));  # url with lyrics
             a.append(artist);
             a.append(title);
             links.append(a);
@@ -83,30 +84,22 @@ class LyricsFetcher:
             print("None");
             return None
         
-        matches = re.findall("<p\sclass=\"text\">(.*?)</p>", res, re.DOTALL | re.MULTILINE);
+        match = re.search("<div class=\"mj_song_body\">\s*<pre>(.*?)</pre>", res, re.DOTALL | re.MULTILINE);
         
-        if(len(matches) == 0):
+        if(not match):
+            print("No match")
             return None;
-        print(len(matches));
-        
-        lyrics = ""
-        i = 0;             
-        for match in matches:  # sometimes match contains translation of song
-            s = match;
-            s = s.strip();
-            #s = s.replace("<br />", "");
-            s = s.replace("<i>", "");
-            s = s.replace("</i>", "");
+             
+        s = match.group(1);
+        s = s.strip();
+        #s = s.replace("<br />", "");
+        s = s.replace("<i>", "");
+        s = s.replace("</i>", "");
+        s = s.replace("<br />", "");
             
-            # lyrics returned are not always standart - once contain new lines other time not... 
-            lines = s.split("<br />");
-            temp = ""
-            for line in lines:
-                temp += line.strip() + "\n"; 
-            lyrics += temp if i == 0 else "\n***************\n" + temp; 
-            i += 1;   
-        print(lyrics);
-        return lyrics;
+            
+        print(s);
+        return s;
 
 
     def get_lyrics(self, song):
@@ -141,9 +134,16 @@ class LyricsFetcher:
 #l = LyricsFetcher().search("tri setri", "setri se chlapce");
 #l = LyricsFetcher().search("orlik", "pivecko");
 #l = LyricsFetcher().search("landa", "pozdrav");
-l = LyricsFetcher().search("", "helenko");
+#l = LyricsFetcher().search("", "helenko");
+#l = LyricsFetcher().search("", "macejko");
+#l = LyricsFetcher().search("", "ceresne");
+#l = LyricsFetcher().search("", "v hlbokej doline");
+#l = LyricsFetcher().search("", "ked ty zajdes i ja zajdu");
+l = LyricsFetcher().search("", "70 sukien mala");
+l = LyricsFetcher().search("", "Kopala studienku");
+
 
   
-#LyricsFetcher().findLyrics(l[0][1]);
+LyricsFetcher().findLyrics(l[0][1]);
         
         
