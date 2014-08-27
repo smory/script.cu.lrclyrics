@@ -73,6 +73,7 @@ class LyricsFetcher:
             #s = s.replace("<br />", "");
             s = s.replace("<i>", "");
             s = s.replace("</i>", "");
+            s = s.replace("</span>", "")
             
             # lyrics returned are not always standart - once contain new lines other time not... 
             lines = s.split("<br />");
